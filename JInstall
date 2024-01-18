@@ -1,0 +1,30 @@
+#!/bin/zsh
+
+echo '
+#!/bin/zsh
+case "$1" in
+"add")
+  echo "$(pwd):$2" >> $HOME/.Jrc
+;;
+*)
+  JDIRS=(${(f)"$(cat $HOME/.Jrc)"})
+  for e in $JDIRS; do
+    d=("${(@s/:/)e}")
+    if [ ${d[2]} = "$1" ]; then
+      if [ -d "${d[1]}" ]; then
+        cd "${d[1]}"
+      else
+        echo "No such directory"
+      fi
+      break
+    fi
+  done
+;;
+esac
+' >> $HOME/.Jdo
+
+echo "
+alias j='source \$HOME/.Jdo'
+" >> $HOME/.zshrc
+
+touch $HOME/.Jrc
